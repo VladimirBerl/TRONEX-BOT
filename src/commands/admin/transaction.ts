@@ -43,7 +43,7 @@ const renderWithdrawalList = async (ctx: any, page: number) => {
 const renderWithdrawalInfo = async (ctx: any, id: number | string) => {
   if (!id) return ctx.answerCbQuery('❌ ID не найден');
 
-  const withdrawal = await apiTransaction.getWithdrawById(id);
+  const withdrawal = await apiTransaction.getWithdrawById(String(id));
   if (!withdrawal) return await ctx.answerCbQuery('❌ Транзакция не найдена');
 
   const text = `

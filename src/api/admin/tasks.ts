@@ -10,7 +10,7 @@ type ResponseTasksGetAll = {
 type RequestTaskCreate = Omit<Task, 'id' | 'createdAt' | 'updatedAt'>;
 
 export const apiTask = {
-  getTaskById: async (id: number | string) => {
+  getTaskById: async (id: string) => {
     try {
       const res = await api.get<Task>(`/admin/tasks/${id}`);
       return res.data;
@@ -26,7 +26,7 @@ export const apiTask = {
       console.error(error);
     }
   },
-  deleteTask: async (id: number | string) => {
+  deleteTask: async (id: string) => {
     try {
       const res = await api.delete<Task>(`/admin/tasks/${id}`);
       return res.data;
@@ -42,7 +42,7 @@ export const apiTask = {
       console.error(error);
     }
   },
-  updateTask: async (id: number | string, data: RequestTaskCreate) => {
+  updateTask: async (id: string, data: RequestTaskCreate) => {
     try {
       const res = await api.patch<Task>(`/admin/tasks/${id}`, data);
       return res.data;

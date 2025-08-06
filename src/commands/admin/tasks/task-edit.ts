@@ -124,7 +124,7 @@ export const setupTaskEditCommands = (bot: Telegraf) => {
     try {
       if (!state) return;
 
-      await apiTask.updateTask(state.id, {
+      await apiTask.updateTask(String(state.id), {
         title: state.title,
         reward: state.reward,
         url: state.url,

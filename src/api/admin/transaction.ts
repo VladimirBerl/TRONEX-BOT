@@ -20,7 +20,7 @@ export const apiTransaction = {
       console.error(error);
     }
   },
-  getWithdrawById: async (id: number | string) => {
+  getWithdrawById: async (id:  string) => {
     try {
       const res = await api.get<ResponseWithdrawById>(`/admin/withdraw/${id}`);
       return res.data;
@@ -28,7 +28,7 @@ export const apiTransaction = {
       console.error(error);
     }
   },
-  updateWithdrawStatus: async (id: number | string, status: string) => {
+  updateWithdrawStatus: async (id:  string, status: string) => {
     try {
       const res = await api.patch<Withdraw>(`/admin/withdraw/${id}/update_status`, { status });
       return res.data;
