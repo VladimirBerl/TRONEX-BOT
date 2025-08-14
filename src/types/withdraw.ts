@@ -7,3 +7,11 @@ export type Withdraw = {
   status: 'pending' | 'paid' | 'rejected';
   createdAt: Date;
 };
+export type Deposit = {
+  id: number;
+  user_id_tg: string;
+  amount: string;
+  network: string;
+  wallet_address: string;
+  createdAt: Date;
+};

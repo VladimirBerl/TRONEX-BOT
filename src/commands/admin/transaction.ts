@@ -1,6 +1,7 @@
 import { Telegraf } from 'telegraf';
 import { apiTransaction } from '~/api/admin/transaction.js';
 import { isAdmin } from '~/middleware/is_admin.js';
+import { setupDepositCommands } from './deposits.js';
 
 const translateStatusWithdrawal = (status: string) => {
   const variant: Record<string, string> = {
@@ -119,4 +120,6 @@ export const setupWithdrawalCommands = (bot: Telegraf) => {
     await ctx.answerCbQuery('❌ Выплата отменена');
     await renderWithdrawalInfo(ctx, id);
   });
+
+  setupDepositCommands(bot);
 };

@@ -3,6 +3,7 @@ import { isAdmin } from '~/middleware/is_admin.js';
 import { setupUsersCommands } from './users.js';
 import { setupWithdrawalCommands } from './transaction.js';
 import { setupTasksCommands } from './tasks/index.js';
+import { setupStatisticsCommands } from './statistics.js';
 
 const renderAdminMenu = async (ctx: Context) => {
   const keyboard = {
@@ -28,17 +29,8 @@ export const setupAdminCommands = (bot: Telegraf) => {
   bot.command('admin', isAdmin, renderAdminMenu);
   bot.action('admin_menu', renderAdminMenu);
 
+  setupStatisticsCommands(bot);
   setupUsersCommands(bot);
   setupWithdrawalCommands(bot);
   setupTasksCommands(bot);
-
-  bot.action('admin_stats', isAdmin, async (ctx) => {
-    await ctx.answerCbQuery();
-
-    await ctx.editMessageText('📊 Статистика:', {
-      reply_markup: {
-        inline_keyboard: [[{ text: '🔙 Назад', callback_data: 'admin_menu' }]],
-      },
-    });
-  });
 };
