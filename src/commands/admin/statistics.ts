@@ -9,6 +9,7 @@ export const setupStatisticsCommands = (bot: Telegraf) => {
 
     const text = `
 📊 Статистика:
+
 👤 Все пользователи: ${statistic.totalUser}
 📤 Все выводы: ${statistic.totalWithdrawal}
 📤 Все пополнения: ${statistic.totalDeposit}

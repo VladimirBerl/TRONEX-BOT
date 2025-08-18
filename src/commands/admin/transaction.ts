@@ -3,6 +3,8 @@ import { apiTransaction } from '~/api/admin/transaction.js';
 import { isAdmin } from '~/middleware/is_admin.js';
 import { setupDepositCommands } from './deposits.js';
 
+const waitingForHash: Map<number, { id: string }> = new Map();
+
 const translateStatusWithdrawal = (status: string) => {
   const variant: Record<string, string> = {
     pending: '⌛В обработке',
@@ -109,9 +111,29 @@ export const setupWithdrawalCommands = (bot: Telegraf) => {
 
   bot.action(/^withdraw_approve:(\d+)/, isAdmin, async (ctx) => {
     const id = ctx.match[1];
-    await apiTransaction.updateWithdrawStatus(id, 'paid');
-    await ctx.answerCbQuery('✅ Выплата подтверждена');
-    await renderWithdrawalInfo(ctx, id);
+    waitingForHash.set(ctx.from.id, { id });
+    await ctx.answerCbQuery();
+    await ctx.reply('✅ Пожалуйста, отправьте hash транзакции для подтверждения вывода:');
+  });
+
+  bot.on('message', isAdmin, async (ctx, next) => {
+    const wait = waitingForHash.get(ctx.from.id);
+    const hash = ctx.message;
+
+    if (!wait || !('text' in hash)) return next();
+
+    const { id } = wait;
+
+    try {
+      await apiTransaction.updateWithdrawStatus(id, 'paid', hash.text);
+      await ctx.reply(`✅ Вывод ID ${id} подтверждён с hash: ${hash.text}`);
+    } catch (error) {
+      console.error(error);
+      await ctx.reply(`❌ Ошибка при подтверждении вывода ID ${id}`);
+    } finally {
+      waitingForHash.delete(ctx.from.id);
+      await renderWithdrawalInfo(ctx, id);
+    }
   });
 
   bot.action(/^withdraw_reject:(\d+)/, isAdmin, async (ctx) => {

@@ -37,9 +37,9 @@ export const apiTransaction = {
       console.error(error);
     }
   },
-  updateWithdrawStatus: async (id: string, status: string) => {
+  updateWithdrawStatus: async (id: string, status: string, hash?: string) => {
     try {
-      const res = await api.patch<Withdraw>(`/admin/withdraw/${id}/update_status`, { status });
+      const res = await api.patch<Withdraw>(`/admin/withdraw/${id}/update_status`, { status,hash });
       return res.data;
     } catch (error) {
       console.error(error);
